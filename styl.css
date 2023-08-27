@@ -1,0 +1,238 @@
+	.head-area {
+		background: url("") repeat fixed 0% 0% / cover transparent;
+	}
+
+	.icon-music-play-button::before {
+		cursor: pointer;
+	}
+
+	/*Selection Color*/
+	::selection {
+		background: #0079C2;
+		color: #fff;
+	}
+
+	::-moz-selection {
+		background: #0079C2;
+		color: #fff;
+	}
+
+	/* Overlay Color*/
+	.overlay {
+		background: rgba(240,248,255, .7);
+	}
+
+	/*Text Color*/
+	.intro a,
+	.head-area,
+	.button,
+	.video-area a,
+	.copyright-info a,
+	.button:hover,
+	.button.alt:hover,
+	.single-pricing:hover .button,
+	.features-area .nav>li:hover>a,
+	.features-area .nav>li.active>a,
+	.call-to-action,
+	.footer-area {
+		color: #fff;
+	}
+
+	.lead-form,
+	.video-dec h3,
+	.single-service h6,
+	.features-area .nav>li>a,
+	.section-title h3 {
+		color: #464646;
+	}
+
+	.single-pricing:hover h2,
+	.single-pricing:hover h5,
+	.lead-form h3,
+	.copyright-info a:hover,
+	.service-icon .icon,
+	.features-content h3 {
+		color: alice blue;
+	}
+
+	/*Background Color*/
+	.single-gallery a:after,
+	.single-gallery a:before,
+	.lead-form,
+	.service-icon,
+	.service-dec,
+	.single-gallery,
+	.video-dec,
+	.testimonial-dec,
+	.testimonial-image,
+	.single-pricing,
+	.section-title {
+		background: #fff;
+	}
+
+	.single-gallery a,
+	.button,
+	.button.alt:hover,
+	.footer-area {
+		background: #464646;
+	}
+
+	.features-area .nav>li:hover>a,
+	.features-area .nav>li.active>a,
+	.button:hover,
+	.single-pricing:hover .button,
+	.button.alt {
+		background: alice blue;
+	}
+
+	.graybg,
+	.features-area .nav>li>a,
+	.input-field input[type="text"],
+	.input-field textarea {
+		background: #ebebeb;
+	}
+
+	/*Border Color*/
+	.border1px,
+	.single-pricing h5 {
+		border-color: #ebebeb;
+	}
+
+	.sticky-container {
+		padding: 0px;
+		margin: 0px;
+		position: fixed;
+		right: -120px;
+		top: 230px;
+		width: 150px;
+		z-index: 1100;
+	}
+
+	.sticky li {
+		list-style-type: none;
+		background-color: #fff;
+		color: #efefef;
+		height: 43px;
+		padding: 0 0 0 6px;
+		margin: 0px 0px 1px 0px;
+		-webkit-transition: all 0.25s ease-in-out;
+		-moz-transition: all 0.25s ease-in-out;
+		-o-transition: all 0.25s ease-in-out;
+		transition: all 0.25s ease-in-out;
+		cursor: pointer;
+	}
+
+	.sticky li:hover {
+		margin-left: -115px;
+	}
+
+	.sticky li i {
+		float: left;
+		margin: 5px 4px;
+		margin-right: 5px;
+	}
+
+	.sticky li p {
+		padding-top: 5px;
+		margin: 0px;
+		line-height: 16px;
+		font-size: 11px;
+	}
+
+	.sticky li p a {
+		text-decoration: none;
+		color: #2C3539;
+	}
+
+	.sticky li p a:hover {
+		text-decoration: underline;
+	}
+
+	.head-area .intro { 
+    color: black;
+    padding-top: 0;
+}
+.intro p {
+    font-size: 13px;
+  	color: black;  
+    padding-top: 10px;
+}
+.head-area .intro ul {
+  	margin: 0 20px;
+    padding: 0 20px;
+  	color: #0079c2;
+    font-size: 13px;
+}
+
+.head-area .overlay {
+    padding: 0;
+}
+h2, .h2-like {
+    font-size: 2em;
+}
+.input-field input[type="text"], .input-field textarea, select {
+    width: 100%;
+    line-height: 30px;
+    margin-bottom: 15px;
+    border: 0;
+    padding-left: 15px;
+    font-size: 12px;
+}
+.button {
+    line-height: 30px;
+}
+.intro ul {
+    list-style-type: decimal;
+    margin: 10px;
+    padding-left: 30px;
+  
+}
+.intro a {
+    color: #c2002b;
+}
+.col-md-4 {
+	color:red;
+}
+.wb-submit {
+  	margin-top: 10px;
+  	margin-bottom: 10px;
+    width: 100%;
+    background-color: #287ACC;
+}
+.lead-form {
+    background-color: sandybrown;
+    margin-bottom: 20px;
+}
+.border1px, .single-pricing h5 {
+    border-color: sandybrown;
+}
+.lead-form-innr {
+    padding: 15px;
+}
+@media screen and (max-width: 480px) {
+	.lead-form {
+    	margin-top: 0;
+    }
+}
+.lead-form h3 {
+    padding:10px 0;
+    font-size: 1.8em;
+    line-height: 20px;
+}
+.input-field input[type="checkbox"] {
+    width: 20px;
+}
+.input-field label {
+    padding: 5px 0;
+    font-size: 11px;
+    font-weight: normal;
+}
+.btn-info span {
+  	color: #FFF;
+}
+.lead-form {
+    padding: 10px;
+    margin-top: 20px;
+}	
+
+.tb_button {padding:1px;cursor:pointer;border-right: 1px solid #8b8b8b;border-left: 1px solid #FFF;border-bottom: 1px solid #fff;}.tb_button.hover {border:2px outset #def; background-color: #f8f8f8 !important;}.ws_toolbar {z-index:100000} .ws_toolbar .ws_tb_btn {cursor:pointer;border:1px solid #555;padding:3px}   .tb_highlight{background-color:yellow} .tb_hide {visibility:hidden} .ws_toolbar img {padding:2px;margin:0px}

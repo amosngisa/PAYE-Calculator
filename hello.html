@@ -1,0 +1,157 @@
+<style>
+    .margin-top-md{
+        margin-top: 15px;
+    }
+</style>
+<div class="container">
+    <div class="col-sm-4">
+        <form class="margin-top-md">
+            <div class="form-group">
+
+                <h3><strong>Calculate</strong></h3>
+                <input class="input-lg form-control margin-top-md" id="pay-gross" type="number" placeholder="Gross Pay" />
+
+                <hr />
+
+                <h4><strong>PAYE Calculation</strong></h4>
+                <input class="form-control margin-top-md" id="insurance-relief" type="number" placeholder="Insurance Relief" />
+
+                <hr />
+
+                <h4><strong>Net Pay Calculation</strong></h4>
+                <input class="form-control margin-top-md" id="non-cash-benefits" type="number" placeholder="Non-cash Benefits" />
+                <input class="form-control margin-top-md" id="pension-contribution" type="number" placeholder="Pension Contributions" />
+                <input class="form-control margin-top-md" id="deductions-other" type="number" placeholder="Other Allowable Deductions" />
+
+                <hr />
+
+                <h4><strong>Old NSSF</strong></h4>
+                <p><label><input class="" type="checkbox" id="old-nssf-rates" /> Use old NSSF Rates</label></p>
+            </div>
+
+            <!-- Response -->
+            <p id="response"></p>
+
+            <button type="submit" class="btn btn-primary btn-lg margin-top-md" id="calculate">Calculate</button>
+        </form>
+    </div>
+
+    <div class="col-sm-4 col-sm-offset-1 margin-top-md">
+        <h4><strong>Gross Pay</strong><span id="result-pay-gross"></span></h4>
+        <hr />
+
+        <h4><strong>Taxable Pay</strong><span id="result-pay-taxable"></span></h4>
+        <hr />
+
+        <h4><strong>NHIF</strong><span id="result-nhif"></span></h4>
+        <hr />
+
+        <h4><strong>NSSF</strong><span id="result-nssf"></span></h4>
+
+        <hr />
+
+        <h4><strong>PAYE</strong><span id="result-paye"></span></h4>
+        <hr />
+
+        <h4><strong>Net Pay</strong><span id="result-pay-net"></span></h4>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    function calculatePAYE(income) {
+        const taxableIncome = income - calculateNSSF(income);
+    
+        if (taxableIncome <= 23999) {
+            return 0;
+        } else if (taxableIncome >= 24000) {
+            const t1 = 24000;
+            const t2 = t1 + 8333;
+            const t3 = t2 + 467667;
+            const t4 = t3 + 300000;
+            const t5 = t4 + 32333;
+    
+            if (taxableIncome === t1) {
+                return (24000 * 0.10) - 2400;
+            } else if (taxableIncome > t1 && taxableIncome <= t2) {
+                const value = taxableIncome - t1;
+                return (2400 + (value * 0.25)) - 2400;
+            } else if (taxableIncome > t2 && taxableIncome <= t3) {
+                const value = taxableIncome - t2;
+                return (2400 + 2083.25 + (value * 0.30)) - 2400;
+            } else if (taxableIncome > t3 && taxableIncome <= t4) {
+                const value = taxableIncome - t3;
+                return (2400 + 2083.25 + 140300.1 + (value * 0.325)) - 2400;
+            } else if (taxableIncome >= t5) {
+                const value = taxableIncome - t4;
+                return (2400 + 2083.25 + 140300.1 + 97500 + (value * 0.35)) - 2400;
+            }
+        }
+    }
+    
+    function calculateNHIF(income) {
+        const nhifRanges = {
+            5999: 150,
+            7999: 300,
+            11999: 400,
+            14999: 500,
+            19999: 600,
+            24999: 750,
+            29999: 850,
+            34999: 900,
+            39999: 950,
+            44999: 1000,
+            49999: 1100,
+            59999: 1200,
+            69999: 1300,
+            79999: 1400,
+            89999: 1500,
+            99999: 1600,
+            119999: 1700
+        };
+    
+        for (const rangeLimit in nhifRanges) {
+            if (income <= rangeLimit) {
+                return nhifRanges[rangeLimit];
+            }
+        }
+    
+        return 1700;
+    }
+    
+    function calculateNSSF(income) {
+        const uel = 18000;
+        const lel = 6000;
+    
+        if (income <= uel) {
+            return 0.06 * income;
+        } else {
+            return 0.06 * uel;
+        }
+    }
+    
+    const income = 50000; // Replace this with the actual income amount
+    const payeTax = calculatePAYE(income);
+    const nhifContribution = calculateNHIF(income);
+    const nssfContribution = calculateNSSF(income);
+    const taxable = income - calculateNSSF(income);
+    const payeAfter = taxable - payeTax;
+    const housing = income * (1.5 / 100);
+    const net = payeAfter - nhifContribution - housing;
+    
+    console.log(`Gross Pay: Kes ${income.toFixed(2)}`);
+    console.log(`NSSF: Kes ${nssfContribution.toFixed(2)}`);
+    console.log(`Taxable Pay: Kes. ${taxable.toFixed(2)}`);
+    console.log(`Personal Relief: Kes 2400.00`);
+    console.log(`PAYE: Kes ${payeTax.toFixed(2)}`);
+    console.log(`Pay after TAX: Kes ${payeAfter.toFixed(2)}`);
+    console.log(`NHIF: Kes ${nhifContribution.toFixed(2)}`);
+    console.log(`Housing Levy: Kes ${housing.toFixed(2)}`);
+    console.log(`NET PAY: Kes ${net.toFixed(2)}`);
+    
+</script>

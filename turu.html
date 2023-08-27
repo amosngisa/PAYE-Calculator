@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="NHIF relief introduced effective January 2022. New Rates Effective January 2021. Free Online payroll PAYE calculator for Kenya. New Tax Law (Amendment) Bill 2020 PAYE tax rates. Calculate your KRA, NHIF, NSSF (Old and new rates) and net pay. Work out backwards from a given net pay.">
+    <meta name="keywords" content="paye, calculator, kenya, kra, nhif, nssf, finance act, 2023">
+    <title> PAYE Tax Calculator for Kenya    </title>
+    
+
+<script src="jquery.js"></script>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://wingubox.com/landing-pages/lp-0001/assets/css/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://wingubox.com/landing-pages/lp-0001/assets/css/bootstrap.css">
+<!-- Linea CSS -->
+<link rel="stylesheet" href="https://wingubox.com/landing-pages/lp-0001/lib/linea/styles.css" />
+
+<!-- Magnific Popup CSS -->
+<link rel="stylesheet" href="https://wingubox.com/landing-pages/lp-0001/lib/Magnific-Popup/dist/magnific-popup.css" />
+
+<!-- Custom styles for this template -->
+<link href="font.css" rel="stylesheet">
+<!-- <link href="style.css" rel="stylesheet"> -->
+<link href="styl.css" rel="stylesheet">
+
+
+
+<!-- Head Area Start -->
+<div class="head-area parallax">
+	<div class="overlay">
+		<div class="container">
+			<div class="row">
+				
+                <div class="col-md-4" >							
+                    <!-- Lead / Subscription Form Start -->
+                    <div class="lead-form" style="background-color: #4A9997;">
+                        <div class="lead-form-innr border1px" style="border-color: #4A9997;"><h3>YOUR PAYROLL DATA </h3>
+
+                            <form id="payeForm" class="contact-form " >	   
+                                
+                                <div class="input-field">  
+                                    <input type="text" id="monthlySalary" name="monthlySalary" placeholder="Monthly Gross Salary" required>
+                                </div>										
+                                
+                                    <div class="input-field">
+                                        <input type="submit" value="Calculate" class="button alt wb-submit" style="background-color: #022B2A;">
+                                    </div>
+                                    
+                                    <div id="netPayResult"></div>
+                                
+                            </form>
+                        </div>	
+                    </div>			
+                    <!-- Lead / Subscription Form End -->
+                </div>				
+                <div class="col-md-8">
+					<!-- Home Page intro Start -->
+					<div class="intro" >
+						<h2>Best PAYE Tax Calculator for Kenya</h2>						
+                        
+                        <p>In Kenya, workers in formal employment are taxed through a deduction named <a href="https://www.kra.go.ke/en/individual/filing-paying/types-of-taxes/paye" target="_blank">Pay As You Earn (PAYE)</a></p>
+                        <br>
+
+                        <h4><b>Individual Tax Bands and Rates (Based on Finance Act 2023)</b></h4><br>
+
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Monthly Tax Bands (KES)</th>
+                                    <th>Rates</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>On the first 24,000</td>
+                                    <td>10%</td>
+                                </tr>
+                                <tr>
+                                    <td>On the next 8,333</td>
+                                    <td>25%</td>
+                                </tr>
+                                <tr>
+                                    <td>On the next&nbsp;467,667</td>
+                                    <td>30%</td>
+                                </tr>
+                                <tr>
+                                    <td>On the next 300,000</td>
+                                    <td>32.5%</td>
+                                </tr>
+                                <tr>
+                                    <td>On all income in excess of 32,333</td>
+                                    <td>35%</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">Personal Relief: KES 2,400.00 per month</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Minimum Taxable Income: KES 24,00.00 per month</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <p>PAYE returns deadline for a given month is the 9th day of the following month. Late payments attract a penalty fine of KES 10,000 (USD 100) charged to the employer.</p>
+
+                        <p>Similarly, NSSF (National Social Security Fund) and NHIF (National Hospital Insurance Fund) are mandatory deductions collected and remitted to relevant statutory bodies on behalf of the employee.</p>
+						
+					</div> 
+                    <!-- Home Page intro End -->
+				</div>
+			
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- Head Area End -->
+
+
+
+<script src="scrip.js" type="text/javascript"></script>
+<!-- Bootstrap core JavaScript
+		================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://wingubox.com/landing-pages/lp-0001/assets/js/bootstrap.min.js"></script>
+
+<!-- jQuery Parallax
+		================================================== -->
+<script src="https://wingubox.com/landing-pages/lp-0001/lib/jquery-parallax/scripts/jquery.parallax-1.1.3.js"></script>
+
+
+<!-- jQuery Magnific-Popup
+		================================================== -->
+<script src="https://wingubox.com/landing-pages/lp-0001/lib/Magnific-Popup/dist/jquery.magnific-popup.min.js"></script>
+
+<!-- jQuery mb.YTPlayer
+		================================================== -->
+<script src="https://wingubox.com/landing-pages/lp-0001/lib/jquery.mb.YTPlayer/inc/jquery.mb.YTPlayer.js"></script>
+
+<!-- jQuery Custom
+		================================================== -->
+<script src="https://wingubox.com/landing-pages/lp-0001/js/custom.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="https://wingubox.com/js/bootstrap-daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="https://wingubox.com/js/bootstrap-datetime-picker/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://wingubox.com/js/bootstrap-datetime-picker/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript">
+	$(function() {
+		$("#payroll-month").datetimepicker({
+			defaultDate: "",
+			format: 'MMMM, YYYY'
+		});
+	});
+</script>
+<input type="hidden" id="submit-token" value="64e89e7153a93"><script type="text/javascript" src="https://wingubox.com/sites-templates/common/js/wb-sites.js-2022032401.php?siteId=30&backLink=../&odPath=../../wingubox.com/html"> </script>
+<input type="hidden" id="http-referer" value="https://www.google.com/" />
+<script type="text/javascript">
+  function formatCurrency(t){t=t.toString().replace(/\$|\,/g,""),isNaN(t)&&(t="0"),sign=t==(t=Math.abs(t)),t=Math.floor(100*t+.50000000001),cents=t%100,t=Math.floor(t/100).toString(),cents<10&&(cents="0"+cents);for(var r=0;r<Math.floor((t.length-(1+r))/3);r++)t=t.substring(0,t.length-(4*r+3))+","+t.substring(t.length-(4*r+3));return(sign?"":"-")+t+"."+cents}$(function(){$("#main-inputs input").keyup(function(){var t,r,a=Array(.5,1,2,3,4),n=parseFloat($("#nae").val().replace(/,/g,"")),o=parseFloat($("#salary").val().replace(/,/g,"")),i=parseFloat($("#yearly-nae-increase").val().replace(/%/g,""));i/=100;var l=0,e=.06;isNaN(o)||isNaN(i)||$("#uel td").not(":first").each(function(c){var h=c+2;c>0&&i&&(n+=n*i),t=Math.round(n*a[c]),$("#uel td:nth-child("+h+") div").html(formatCurrency(t)),r=parseFloat($("#lel td:nth-child("+h+")").html().replace(/,/g,"")),effectiveSalary=o>t?t:o,l=effectiveSalary>r?r:o,t2Salary=effectiveSalary-l,t2Salary=t2Salary>t?t:t2Salary,$("#t1-salary td:nth-child("+h+")").html(formatCurrency(l)),$("#t2-salary td:nth-child("+h+")").html(formatCurrency(t2Salary)),t1Contribution=Math.round(l*e),t2Contribution=Math.round(t2Salary*e),$("#t1-contribution td:nth-child("+h+")").html(formatCurrency(t1Contribution)),$("#t2-contribution td:nth-child("+h+")").html(formatCurrency(t2Contribution)),totalContribution=t1Contribution+t2Contribution,$("#total-contribution td:nth-child("+h+")").html(formatCurrency(totalContribution));var u=Math.round(totalContribution/o*100*10)/10;$("#effective-contribution td:nth-child("+h+")").html(u+"%")})})});
+</script>  
+</body>
+
+</html>
