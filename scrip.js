@@ -2,9 +2,46 @@
 document.getElementById("payeForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const income = parseFloat(document.getElementById("monthlySalary").value);
+    const option = document.getElementById("treat-salary-as").value;
+    const nssf = document.getElementById("nssf-rates").value;
+    const nhif = document.getElementById("deduct-nhif").checked;
+
+    function deduct(income)
+    {
+        if (nssf == "both")
+        {
+            return calculateNSSF(income);
+        }
+        else if(nssf == "tier1")
+        {
+            if (income <= 5999)
+            {
+                return  0.06 * income;
+            }
+            else if (income > 5999)
+            {
+                return 360;   
+            }
+
+        }
+        else if(nssf == "oldRates")
+        {
+            return 200;
+        }
+        else if(nssf == "none")
+        {
+            return 0;   
+        }
+        else
+        {
+            return calculateNSSF(income);
+        }
+    }
 
     function calculatePAYE(income) {
-        const taxableIncome = income - calculateNSSF(income);
+
+        const minus = deduct(income);
+        const taxableIncome = income - minus;
     
         if (taxableIncome <= 23999) {
             return 0;
@@ -73,15 +110,27 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
             return 0.06 * uel;
         }
     }
+
+    function getnhif(nhif)
+    {
+        if(nhif)
+        {
+            return calculateNHIF(income);
+        }
+        else
+        {
+            return 0;
+        }
+    }
     
-    function formatCurrency(amount) {
+    function formatCurrency(amount) 
+    {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'Kes' }).format(amount);
     }
-    // const income = 50000; // Replace this with the actual income amount
     const payeTax = calculatePAYE(income);
-    const nhifContribution = calculateNHIF(income);
-    const nssfContribution = calculateNSSF(income);
-    const taxable = income - calculateNSSF(income);
+    const nhifContribution = getnhif(nhif);
+    const nssfContribution = deduct(income);
+    const taxable = income - nssfContribution;
     const payeAfter = taxable - payeTax;
     const housing = income * (1.5 / 100);
     const net = payeAfter - nhifContribution - housing;
@@ -121,15 +170,19 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
 
     // Define the data rows
     const rowData = [
-    ["Gross Pay:", `${formatCurrency(income)}`],
-    ["NSSF:", `- ${formatCurrency(nssfContribution)}`],
-    ["TAXABLE PAY:", `${formatCurrency(taxable)}`],
-    ["Personal Relief:", `- ${formatCurrency(relief)}`],
-    ["P.A.Y.E:", `${formatCurrency(payeTax)}`],
-    ["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
-    ["NHIF:", `- ${formatCurrency(nhifContribution)}`],
-    ["Housing Levy:", `- ${formatCurrency(housing)}`],
-    ["NET PAY:", `${formatCurrency(net)}`],
+        ["Gross Pay:", `${formatCurrency(income)}`],
+        ...(nssfContribution != 0  
+            ?[["NSSF:", `- ${formatCurrency(nssfContribution)}`]]
+            :[]),
+        ["TAXABLE PAY:", `${formatCurrency(taxable)}`],
+        ["Personal Relief:", `- ${formatCurrency(relief)}`],
+        ["P.A.Y.E:", `${formatCurrency(payeTax)}`],
+        ["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
+        ...(nhifContribution != 0  
+            ?[["NHIF:", `- ${formatCurrency(nhifContribution)}`]]
+            :[]),
+        ["Housing Levy:", `- ${formatCurrency(housing)}`],
+        ["NET PAY:", `${formatCurrency(net)}`],
     ];
 
     // Create rows and cells for each data entry

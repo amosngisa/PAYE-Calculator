@@ -42,13 +42,32 @@
                                 
                                 <div class="input-field">  
                                     <input type="text" id="monthlySalary" name="monthlySalary" placeholder="Monthly Gross Salary" required>
-                                </div>										
+                                </div>
+                                <div class="input-field">
+                                    <select id="treat-salary-as" name="treat-salary-as" title="Treat Salary As">
+                                    <option value="">Select Treat Salary As</option>
+                                    <option value="BasicPay">Basic Pay</option>
+                                    <option value="NetPay">Net Pay</option>
+                                </select>
+                                </div>
+                                <div class="input-field">
+                                <select id="nssf-rates" name="nssf-rates" title="NSSF Rates">
+                                    <option value="">Select NSSF Rates</option>
+                                    <option value="both">NSSF Tier 1 &amp; 2</option>
+                                    <option value="tier1"> NSSF Tier 1</option>
+                                    <option value="oldRates"> NSSF Old Rates</option>
+                                    <option value="none"> None</option>
+                                </select>
+                                </div>
+                                <div class="input-field">  
+                                    <input type="checkbox" title="Deduct NHIF" id="deduct-nhif" name="deduct-nhif" data-type="" checked="checked"> Deduct NHIF</label>
+                                 </div>										
                                 
-                                    <div class="input-field">
-                                        <input type="submit" value="Calculate" class="button alt wb-submit" style="background-color: #022B2A;">
-                                    </div>
-                                    
-                                    <div id="netPayResult"></div>
+                                <div class="input-field">
+                                    <input type="submit" value="Calculate" class="button alt wb-submit" style="background-color: #022B2A;">
+                                </div>
+                                
+                                <div id="netPayResult"></div>
                                 
                             </form>
                         </div>	
