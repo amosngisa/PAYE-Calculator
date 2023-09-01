@@ -127,27 +127,45 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
     {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'Kes' }).format(amount);
     }
-    const payeTax = calculatePAYE(income);
+
+    function calculateGrossSalary(income) {
+        let gross = income + nhifContribution + housing; // Start with net pay and add NHIF and housing deductions
+
+        // Reverse calculate PAYE
+        gross += payeTax;
+
+        // Reverse calculate NSSF contribution
+        if (nssfContribution != 0) {
+            gross += nssfContribution;
+        }
+
+        // Reverse calculate NHIF contribution
+        if (nhifContribution != 0) {
+            gross += nhifContribution;
+        }
+
+        // Adjust for personal relief
+        gross += relief;
+        gross += nhifrelief;
+
+        return gross;
+    }
+
+    
     const nhifContribution = getnhif(nhif);
     const nssfContribution = deduct(income);
     const taxable = income - nssfContribution;
+    const nhifrelief = nhifContribution * 0.15;
+    const payeTax = calculatePAYE(income) - nhifrelief;
     const payeAfter = taxable - payeTax;
     const housing = income * (1.5 / 100);
     const net = payeAfter - nhifContribution - housing;
     const relief = 2400;
+   
     
-    // console.log(`Gross Pay: Kes ${income.toFixed(2)}`);
-    // console.log(`NSSF: Kes ${nssfContribution.toFixed(2)}`);
-    // console.log(`Taxable Pay: Kes. ${taxable.toFixed(2)}`);
-    // console.log(`Personal Relief: Kes 2400.00`);
-    // console.log(`PAYE: Kes ${payeTax.toFixed(2)}`);
-    // console.log(`Pay after TAX: Kes ${payeAfter.toFixed(2)}`);
-    // console.log(`NHIF: Kes ${nhifContribution.toFixed(2)}`);
-    // console.log(`Housing Levy: Kes ${housing.toFixed(2)}`);
-    // console.log(`NET PAY: Kes ${net.toFixed(2)}`);
-
-    // document.getElementById("netPayResult").textContent = `Your net pay is: ${formatCurrency(net)}`;
-
+    const netPay = calculateGrossSalary(income);
+    // console.log(`Net Pay: ${formatCurrency(netPay)}`);
+    
     // Create a div element with the specified classes
     const divElement = document.createElement("div");
     divElement.className = "alert alert-info";
@@ -170,19 +188,29 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
 
     // Define the data rows
     const rowData = [
-        ["Gross Pay:", `${formatCurrency(income)}`],
+        ...(option != "NetPay"
+            ?[["Gross Pay:", `${formatCurrency(income)}`]]
+            :[["Gross Pay:", `${formatCurrency(netPay)}`]]
+        ),
         ...(nssfContribution != 0  
             ?[["NSSF:", `- ${formatCurrency(nssfContribution)}`]]
             :[]),
         ["TAXABLE PAY:", `${formatCurrency(taxable)}`],
         ["Personal Relief:", `- ${formatCurrency(relief)}`],
+        ...(nhifContribution != 0  
+            ?[["Insurance (NHIF) Relief::", `- ${formatCurrency(nhifrelief)}`]]
+            :[]),
         ["P.A.Y.E:", `${formatCurrency(payeTax)}`],
         ["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
         ...(nhifContribution != 0  
             ?[["NHIF:", `- ${formatCurrency(nhifContribution)}`]]
             :[]),
         ["Housing Levy:", `- ${formatCurrency(housing)}`],
-        ["NET PAY:", `${formatCurrency(net)}`],
+        ...(option != "NetPay"
+            ?[["NET PAY:", `${formatCurrency(net)}`]]
+            :[["NET PAY:", `${formatCurrency(income)}`]]
+        ),
+        
     ];
 
     // Create rows and cells for each data entry
