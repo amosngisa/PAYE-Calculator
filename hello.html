@@ -1,157 +1,289 @@
-<style>
-    .margin-top-md{
-        margin-top: 15px;
-    }
-</style>
-<div class="container">
-    <div class="col-sm-4">
-        <form class="margin-top-md">
-            <div class="form-group">
+<!-- Lead / Subscription Form Start -->
+<div class="lead-form" style="background-color: #4A9997;">
+    <div class="lead-form-innr border1px" >
+        <h3>YOUR PAYROLL DATA </h3>
 
-                <h3><strong>Calculate</strong></h3>
-                <input class="input-lg form-control margin-top-md" id="pay-gross" type="number" placeholder="Gross Pay" />
-
-                <hr />
-
-                <h4><strong>PAYE Calculation</strong></h4>
-                <input class="form-control margin-top-md" id="insurance-relief" type="number" placeholder="Insurance Relief" />
-
-                <hr />
-
-                <h4><strong>Net Pay Calculation</strong></h4>
-                <input class="form-control margin-top-md" id="non-cash-benefits" type="number" placeholder="Non-cash Benefits" />
-                <input class="form-control margin-top-md" id="pension-contribution" type="number" placeholder="Pension Contributions" />
-                <input class="form-control margin-top-md" id="deductions-other" type="number" placeholder="Other Allowable Deductions" />
-
-                <hr />
-
-                <h4><strong>Old NSSF</strong></h4>
-                <p><label><input class="" type="checkbox" id="old-nssf-rates" /> Use old NSSF Rates</label></p>
+        <form id="payeForm" class="contact-form">    
+            
+            <div class="input-field">  
+                <input type="text" id="monthlySalary" name="monthlySalary" placeholder="Monthly Gross Salary" required>
             </div>
-
-            <!-- Response -->
-            <p id="response"></p>
-
-            <button type="submit" class="btn btn-primary btn-lg margin-top-md" id="calculate">Calculate</button>
+            <div class="form">
+                <select id="treat-salary-as" name="treat-salary-as">
+                <option>Select Treat Salary As</option>
+                <option value="BasicPay" >Basic Pay</option>
+                <option value="NetPay">Net Pay</option>
+            </select>
+            </div>
+            <div class="input">
+            <select id="nssf-rates" name="nssf-rates" >
+                <option value="">Select NSSF Rates</option>
+                <option value="both">NSSF Tier 1 &amp; 2</option>
+                <option value="tier1"> NSSF Tier 1</option>
+                <option value="oldRates"> NSSF Old Rates</option>
+                <option value="none"> None</option>
+            </select>
+            </div>
+            <div class="input-field">  
+                <input type="checkbox" title="Deduct NHIF" id="deduct-nhif" name="deduct-nhif" data-type="" checked="checked"> Deduct NHIF
+             </div><br>
+            
+                <div class="input-field">
+                    <input type="submit" value="Calculate" class="button alt wb-submit" style="background-color: #022B2A;">
+                </div><br>
+                
+                <div id="netPayResult"></div>
+            
         </form>
-    </div>
-
-    <div class="col-sm-4 col-sm-offset-1 margin-top-md">
-        <h4><strong>Gross Pay</strong><span id="result-pay-gross"></span></h4>
-        <hr />
-
-        <h4><strong>Taxable Pay</strong><span id="result-pay-taxable"></span></h4>
-        <hr />
-
-        <h4><strong>NHIF</strong><span id="result-nhif"></span></h4>
-        <hr />
-
-        <h4><strong>NSSF</strong><span id="result-nssf"></span></h4>
-
-        <hr />
-
-        <h4><strong>PAYE</strong><span id="result-paye"></span></h4>
-        <hr />
-
-        <h4><strong>Net Pay</strong><span id="result-pay-net"></span></h4>
-    </div>
-</div>
-
-
-
-
-
+    </div>  
+</div>          
+<!-- Lead / Subscription Form End -->
 
 
 <script>
-    function calculatePAYE(income) {
-        const taxableIncome = income - calculateNSSF(income);
-    
-        if (taxableIncome <= 23999) {
-            return 0;
-        } else if (taxableIncome >= 24000) {
-            const t1 = 24000;
-            const t2 = t1 + 8333;
-            const t3 = t2 + 467667;
-            const t4 = t3 + 300000;
-            const t5 = t4 + 32333;
-    
-            if (taxableIncome === t1) {
-                return (24000 * 0.10) - 2400;
-            } else if (taxableIncome > t1 && taxableIncome <= t2) {
-                const value = taxableIncome - t1;
-                return (2400 + (value * 0.25)) - 2400;
-            } else if (taxableIncome > t2 && taxableIncome <= t3) {
-                const value = taxableIncome - t2;
-                return (2400 + 2083.25 + (value * 0.30)) - 2400;
-            } else if (taxableIncome > t3 && taxableIncome <= t4) {
-                const value = taxableIncome - t3;
-                return (2400 + 2083.25 + 140300.1 + (value * 0.325)) - 2400;
-            } else if (taxableIncome >= t5) {
-                const value = taxableIncome - t4;
-                return (2400 + 2083.25 + 140300.1 + 97500 + (value * 0.35)) - 2400;
-            }
-        }
-    }
-    
-    function calculateNHIF(income) {
-        const nhifRanges = {
-            5999: 150,
-            7999: 300,
-            11999: 400,
-            14999: 500,
-            19999: 600,
-            24999: 750,
-            29999: 850,
-            34999: 900,
-            39999: 950,
-            44999: 1000,
-            49999: 1100,
-            59999: 1200,
-            69999: 1300,
-            79999: 1400,
-            89999: 1500,
-            99999: 1600,
-            119999: 1700
-        };
-    
-        for (const rangeLimit in nhifRanges) {
-            if (income <= rangeLimit) {
-                return nhifRanges[rangeLimit];
-            }
-        }
-    
-        return 1700;
-    }
-    
-    function calculateNSSF(income) {
-        const uel = 18000;
-        const lel = 6000;
-    
-        if (income <= uel) {
-            return 0.06 * income;
-        } else {
-            return 0.06 * uel;
-        }
-    }
-    
-    const income = 50000; // Replace this with the actual income amount
-    const payeTax = calculatePAYE(income);
-    const nhifContribution = calculateNHIF(income);
-    const nssfContribution = calculateNSSF(income);
-    const taxable = income - calculateNSSF(income);
-    const payeAfter = taxable - payeTax;
-    const housing = income * (1.5 / 100);
-    const net = payeAfter - nhifContribution - housing;
-    
-    console.log(`Gross Pay: Kes ${income.toFixed(2)}`);
-    console.log(`NSSF: Kes ${nssfContribution.toFixed(2)}`);
-    console.log(`Taxable Pay: Kes. ${taxable.toFixed(2)}`);
-    console.log(`Personal Relief: Kes 2400.00`);
-    console.log(`PAYE: Kes ${payeTax.toFixed(2)}`);
-    console.log(`Pay after TAX: Kes ${payeAfter.toFixed(2)}`);
-    console.log(`NHIF: Kes ${nhifContribution.toFixed(2)}`);
-    console.log(`Housing Levy: Kes ${housing.toFixed(2)}`);
-    console.log(`NET PAY: Kes ${net.toFixed(2)}`);
-    
-</script>
+
+document.getElementById("payeForm").addEventListener("submit", function(event) {
+event.preventDefault();
+const income = parseFloat(document.getElementById("monthlySalary").value);
+const option = document.getElementById("treat-salary-as").value;
+const nssf = document.getElementById("nssf-rates").value;
+const nhif = document.getElementById("deduct-nhif").checked;
+
+function deduct(income)
+{
+if (nssf == "both")
+{
+return calculateNSSF(income);
+}
+else if(nssf == "tier1")
+{
+if (income <= 5999)
+{
+return  0.06 * income;
+}
+else if (income > 5999)
+{
+return 360;   
+}
+
+}
+else if(nssf == "oldRates")
+{
+return 200;
+}
+else if(nssf == "none")
+{
+return 0;   
+}
+else
+{
+return calculateNSSF(income);
+}
+}
+
+function calculatePAYE(income) {
+
+const minus = deduct(income);
+const taxableIncome = income - minus;
+
+if (taxableIncome <= 23999) {
+return 0;
+} else if (taxableIncome >= 24000) {
+const t1 = 24000;
+const t2 = t1 + 8333;
+const t3 = t2 + 467667;
+const t4 = t3 + 300000;
+const t5 = t4 + 32333;
+
+if (taxableIncome === t1) {
+return (24000 * 0.10) - 2400;
+} else if (taxableIncome > t1 && taxableIncome <= t2) {
+const value = taxableIncome - t1;
+return (2400 + (value * 0.25)) - 2400;
+} else if (taxableIncome > t2 && taxableIncome <= t3) {
+const value = taxableIncome - t2;
+return (2400 + 2083.25 + (value * 0.30)) - 2400;
+} else if (taxableIncome > t3 && taxableIncome <= t4) {
+const value = taxableIncome - t3;
+return (2400 + 2083.25 + 140300.1 + (value * 0.325)) - 2400;
+} else if (taxableIncome >= t5) {
+const value = taxableIncome - t4;
+return (2400 + 2083.25 + 140300.1 + 97500 + (value * 0.35)) - 2400;
+}
+}
+}
+
+function calculateNHIF(income) {
+const nhifRanges = {
+5999: 150,
+7999: 300,
+11999: 400,
+14999: 500,
+19999: 600,
+24999: 750,
+29999: 850,
+34999: 900,
+39999: 950,
+44999: 1000,
+49999: 1100,
+59999: 1200,
+69999: 1300,
+79999: 1400,
+89999: 1500,
+99999: 1600,
+119999: 1700
+};
+
+for (const rangeLimit in nhifRanges) {
+if (income <= rangeLimit) {
+return nhifRanges[rangeLimit];
+}
+}
+
+return 1700;
+}
+
+function calculateNSSF(income) {
+const uel = 18000;
+const lel = 6000;
+
+if (income <= uel) {
+return 0.06 * income;
+} else {
+return 0.06 * uel;
+}
+}
+
+function getnhif(nhif)
+{
+if(nhif)
+{
+return calculateNHIF(income);
+}
+else
+{
+return 0;
+}
+}
+
+function formatCurrency(amount) 
+{
+return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'Kes' }).format(amount);
+}
+
+function calculateGrossSalary(income) {
+let gross = income + nhifContribution + housing; // Start with net pay and add NHIF and housing deductions
+
+// Reverse calculate PAYE
+gross += payeTax;
+
+// Reverse calculate NSSF contribution
+if (nssfContribution != 0) {
+gross += nssfContribution;
+}
+
+// Reverse calculate NHIF contribution
+if (nhifContribution != 0) {
+gross += nhifContribution;
+}
+
+// Adjust for personal relief
+gross += relief;
+gross += nhifrelief;
+
+return gross;
+}
+
+
+const nhifContribution = getnhif(nhif);
+const nssfContribution = deduct(income);
+const taxable = income - nssfContribution;
+const nhifrelief = nhifContribution * 0.15;
+const payeTax = calculatePAYE(income) - nhifrelief;
+const payeAfter = taxable - payeTax;
+const housing = income * (1.5 / 100);
+const net = payeAfter - nhifContribution - housing;
+const relief = 2400;
+
+
+const netPay = calculateGrossSalary(income);
+// console.log(`Net Pay: ${formatCurrency(netPay)}`);
+
+// Create a div element with the specified classes
+const divElement = document.createElement("div");
+divElement.className = "alert alert-info";
+
+// Create a table element with the specified classes
+const tableElement = document.createElement("table");
+tableElement.className = "table table-condensed table-bordered";
+
+// Create the table header row
+const theadElement = document.createElement("thead");
+const headerRow = document.createElement("tr");
+const headerCell = document.createElement("th");
+headerCell.colSpan = "2";
+headerCell.textContent = "Pay Slip Results:";
+headerRow.appendChild(headerCell);
+theadElement.appendChild(headerRow);
+
+// Create the table body
+const tbodyElement = document.createElement("tbody");
+
+// Define the data rows
+const rowData = [
+...(option != "NetPay"
+?[["Gross Pay:", `${formatCurrency(income)}`]]
+:[["Gross Pay:", `${formatCurrency(netPay)}`]]
+),
+...(nssfContribution != 0  
+?[["NSSF:", `- ${formatCurrency(nssfContribution)}`]]
+:[]),
+["TAXABLE PAY:", `${formatCurrency(taxable)}`],
+["Personal Relief:", `- ${formatCurrency(relief)}`],
+...(nhifContribution != 0  
+?[["Insurance (NHIF) Relief::", `- ${formatCurrency(nhifrelief)}`]]
+:[]),
+["P.A.Y.E:", `${formatCurrency(payeTax)}`],
+["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
+...(nhifContribution != 0  
+?[["NHIF:", `- ${formatCurrency(nhifContribution)}`]]
+:[]),
+["Housing Levy:", `- ${formatCurrency(housing)}`],
+...(option != "NetPay"
+?[["NET PAY:", `${formatCurrency(net)}`]]
+:[["NET PAY:", `${formatCurrency(income)}`]]
+),
+
+];
+
+// Create rows and cells for each data entry
+rowData.forEach(([label, value]) => {
+const row = document.createElement("tr");
+const labelCell = document.createElement("td");
+labelCell.align = "right";
+labelCell.textContent = label;
+const valueCell = document.createElement("td");
+valueCell.align = "right";
+const strongElement = document.createElement("b");
+strongElement.textContent = value;
+valueCell.appendChild(strongElement);
+row.appendChild(labelCell);
+row.appendChild(valueCell);
+tbodyElement.appendChild(row);
+});
+
+// Append all elements to the DOM
+tableElement.appendChild(theadElement);
+tableElement.appendChild(tbodyElement);
+divElement.appendChild(tableElement);
+
+// Find the target element in the HTML where you want to append the created content
+document.getElementById("netPayResult").textContent = ` `;
+const targetElement = document.getElementById("netPayResult"); // Replace with the actual ID of the target element
+targetElement.appendChild(divElement);
+
+
+
+});
+
+</script>                    

@@ -69,6 +69,39 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
             }
         }
     }
+
+    function netPAYE(income) {
+
+        const minus = deduct(income);
+        const taxableIncome = income + minus;
+        //const taxableIncome = income;
+    
+        if (taxableIncome <= 23999) {
+            return 0;
+        } else if (taxableIncome >= 24000) {
+            const t1 = 24000;
+            const t2 = t1 + 8333;
+            const t3 = t2 + 467667;
+            const t4 = t3 + 300000;
+            const t5 = t4 + 32333;
+    
+            if (taxableIncome === t1) {
+                return (24000 * 0.10) - 2400;
+            } else if (taxableIncome > t1 && taxableIncome <= t2) {
+                const value = taxableIncome - t1;
+                return (2400 + (value * 0.25)) - 2400;
+            } else if (taxableIncome > t2 && taxableIncome <= t3) {
+                const value = taxableIncome - t2;
+                return (2400 + 2083.25 + (value * 0.30)) - 2400;
+            } else if (taxableIncome > t3 && taxableIncome <= t4) {
+                const value = taxableIncome - t3;
+                return (2400 + 2083.25 + 140300.1 + (value * 0.325)) - 2400;
+            } else if (taxableIncome >= t5) {
+                const value = taxableIncome - t4;
+                return (2400 + 2083.25 + 140300.1 + 97500 + (value * 0.35)) - 2400;
+            }
+        }
+    }
     
     function calculateNHIF(income) {
         const nhifRanges = {
@@ -132,7 +165,7 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
         let gross = income + nhifContribution + housing; // Start with net pay and add NHIF and housing deductions
 
         // Reverse calculate PAYE
-        gross += payeTax;
+        gross += netpaye;
 
         // Reverse calculate NSSF contribution
         if (nssfContribution != 0) {
@@ -150,21 +183,29 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
 
         return gross;
     }
-
     
     const nhifContribution = getnhif(nhif);
     const nssfContribution = deduct(income);
     const taxable = income - nssfContribution;
     const nhifrelief = nhifContribution * 0.15;
     const payeTax = calculatePAYE(income) - nhifrelief;
+    const netpaye = netPAYE(income);
     const payeAfter = taxable - payeTax;
     const housing = income * (1.5 / 100);
     const net = payeAfter - nhifContribution - housing;
-    const relief = 2400;
-   
-    
+    const relief = 2400;  
     const netPay = calculateGrossSalary(income);
-    // console.log(`Net Pay: ${formatCurrency(netPay)}`);
+    const netaxable = netPay - nssfContribution ;
+    const house = netPay * (1.5 / 100);
+    const neTax = calculatePAYE(netPay) - nhifrelief;
+    //netPAYE(netPay) - nhifrelief;
+    const netAfter = netaxable - neTax;
+    const netnhif = calculateNHIF(netPay);
+    const netrelief = netnhif * 0.15;
+   
+    // netPay - nssfContribution;
+    // const netpaye = netPAYE(income) - nhifrelief;
+
     
     // Create a div element with the specified classes
     const divElement = document.createElement("div");
@@ -186,7 +227,9 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
     // Create the table body
     const tbodyElement = document.createElement("tbody");
 
-    // Define the data rows
+    if (option != "NetPay")
+    {
+          // Define the data rows
     const rowData = [
         ...(option != "NetPay"
             ?[["Gross Pay:", `${formatCurrency(income)}`]]
@@ -195,21 +238,32 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
         ...(nssfContribution != 0  
             ?[["NSSF:", `- ${formatCurrency(nssfContribution)}`]]
             :[]),
-        ["TAXABLE PAY:", `${formatCurrency(taxable)}`],
+        ...(option != "NetPay"
+            ?[["TAXABLE PAY:", `${formatCurrency(taxable)}`]]
+            :[["TAXABLE PAY:", `${formatCurrency(netaxable)}`]]),
         ["Personal Relief:", `- ${formatCurrency(relief)}`],
         ...(nhifContribution != 0  
-            ?[["Insurance (NHIF) Relief::", `- ${formatCurrency(nhifrelief)}`]]
+            ?[["Insurance (NHIF) Relief:", `- ${formatCurrency(nhifrelief)}`]]
             :[]),
-        ["P.A.Y.E:", `${formatCurrency(payeTax)}`],
-        ["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
+        ...(option != "NetPay"
+            ?[["P.A.Y.E:", `${formatCurrency(payeTax)}`]]
+            :[["P.A.Y.E:", `${formatCurrency(neTax)}`]]),
+        ...(option != "NetPay"
+            ?[["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`]]
+            :[["PAY AFTER TAX:", `${formatCurrency(netAfter)}`]]),
+        //["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
         ...(nhifContribution != 0  
             ?[["NHIF:", `- ${formatCurrency(nhifContribution)}`]]
             :[]),
-        ["Housing Levy:", `- ${formatCurrency(housing)}`],
+        //["Housing Levy:", `- ${formatCurrency(housing)}`],
         ...(option != "NetPay"
-            ?[["NET PAY:", `${formatCurrency(net)}`]]
-            :[["NET PAY:", `${formatCurrency(income)}`]]
+            ?[["Housing Levy:", `${formatCurrency(housing)}`]]
+            :[["Housing Levy:", `${formatCurrency(house)}`]]
         ),
+        ...(option != "NetPay"
+        ?[["NET PAY:", `${formatCurrency(net)}`]]
+        :[["NET PAY:", `${formatCurrency(income)}`]]
+    ),
         
     ];
 
@@ -228,6 +282,66 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
     row.appendChild(valueCell);
     tbodyElement.appendChild(row);
     });
+
+    }
+    else
+    {
+
+    // Define the data rows
+    const rowData = [
+        ...(option != "NetPay"
+            ?[["Gross Pay:", `${formatCurrency(income)}`]]
+            :[["Gross Pay:", `${formatCurrency(netPay)}`]]
+        ),
+        ...(nssfContribution != 0  
+            ?[["NSSF:", `- ${formatCurrency(nssfContribution)}`]]
+            :[]),
+        ...(option != "NetPay"
+            ?[["TAXABLE PAY:", `${formatCurrency(taxable)}`]]
+            :[["TAXABLE PAY:", `${formatCurrency(netaxable)}`]]),
+        ["Personal Relief:", `- ${formatCurrency(relief)}`],
+        ...(nhifContribution != 0  
+            ?[["Insurance (NHIF) Relief:", `- ${formatCurrency(netrelief)}`]]
+            :[]),
+        ...(option != "NetPay"
+            ?[["P.A.Y.E:", `${formatCurrency(payeTax)}`]]
+            :[["P.A.Y.E:", `${formatCurrency(neTax)}`]]),
+        ...(option != "NetPay"
+            ?[["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`]]
+            :[["PAY AFTER TAX:", `${formatCurrency(netAfter)}`]]),
+        //["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
+        ...(nhifContribution != 0  
+            ?[["NHIF:", `- ${formatCurrency(netnhif)}`]]
+            :[]),
+        //["Housing Levy:", `- ${formatCurrency(housing)}`],
+        ...(option != "NetPay"
+            ?[["Housing Levy:", `${formatCurrency(housing)}`]]
+            :[["Housing Levy:", `${formatCurrency(house)}`]]
+        ),
+        ...(option != "NetPay"
+        ?[["NET PAY:", `${formatCurrency(net)}`]]
+        :[["NET PAY:", `${formatCurrency(income)}`]]
+    ),
+        
+    ];
+
+    // Create rows and cells for each data entry
+    rowData.forEach(([label, value]) => {
+    const row = document.createElement("tr");
+    const labelCell = document.createElement("td");
+    labelCell.align = "right";
+    labelCell.textContent = label;
+    const valueCell = document.createElement("td");
+    valueCell.align = "right";
+    const strongElement = document.createElement("b");
+    strongElement.textContent = value;
+    valueCell.appendChild(strongElement);
+    row.appendChild(labelCell);
+    row.appendChild(valueCell);
+    tbodyElement.appendChild(row);
+    });
+
+}
 
     // Append all elements to the DOM
     tableElement.appendChild(theadElement);
