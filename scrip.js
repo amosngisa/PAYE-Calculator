@@ -8,29 +8,31 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
 
     function deduct(income)
     {
-        if (nssf == "both")
+        if(nssf == "tier1")
         {
-            return calculateNSSF(income);
-        }
-        else if(nssf == "tier1")
-        {
-            if (income <= 5999)
+            if (income <= 7000)
             {
-                return  0.06 * income;
+                return  (income * 0.06);
             }
-            else if (income > 5999)
+            else if (income > 7000)
             {
-                return 360;   
+                return 7000 * 0.06;
             }
 
         }
-        else if(nssf == "oldRates")
+        else if(nssf == "tier2")
         {
-            return 200;
-        }
-        else if(nssf == "none")
-        {
-            return 0;   
+            const bal = income - 7000;
+
+            if (bal <= 29000)
+            {
+                return  (bal * 0.06);
+            }
+            else if (bal > 29000)
+            {
+                return (1740);   
+            }
+           
         }
         else
         {
@@ -104,44 +106,38 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
     }
     
     function calculateNHIF(income) {
-        const nhifRanges = {
-            5999: 150,
-            7999: 300,
-            11999: 400,
-            14999: 500,
-            19999: 600,
-            24999: 750,
-            29999: 850,
-            34999: 900,
-            39999: 950,
-            44999: 1000,
-            49999: 1100,
-            59999: 1200,
-            69999: 1300,
-            79999: 1400,
-            89999: 1500,
-            99999: 1600,
-            119999: 1700
-        };
-    
-        for (const rangeLimit in nhifRanges) {
-            if (income <= rangeLimit) {
-                return nhifRanges[rangeLimit];
-            }
+        let ded = income * 0.0275;
+
+        if (ded <= 300)
+        {
+            return 300;
         }
-    
-        return 1700;
+        else if (ded >= 300)
+        {
+            return ded;
+        }
     }
     
     function calculateNSSF(income) {
-        const uel = 18000;
-        const lel = 6000;
-    
-        if (income <= uel) {
-            return 0.06 * income;
-        } else {
-            return 0.06 * uel;
+        let mara1 = 0, mara2 = 0, mara3 = 0;
+        
+        if (income <= 7000)
+        {
+            mara1 = (income * 0.06) ;
+            return mara1;
         }
+        const bala = income - 7000; 
+
+        if (bala <= 29000) {
+            mara1 = 7000 * 0.06;
+            mara2 = bala * 0.06 + mara1;
+            return mara2;
+        } else if (bala > 29000) {
+            mara1 = 7000 * 0.06;
+            mara3 = 1740 + mara1; 
+            return mara3;
+        }
+       
     }
 
     function getnhif(nhif)
@@ -243,7 +239,7 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
             :[["TAXABLE PAY:", `${formatCurrency(netaxable)}`]]),
         ["Personal Relief:", `- ${formatCurrency(relief)}`],
         ...(nhifContribution != 0  
-            ?[["Insurance (NHIF) Relief:", `- ${formatCurrency(nhifrelief)}`]]
+            ?[["Insurance (SHIF) Relief:", `- ${formatCurrency(nhifrelief)}`]]
             :[]),
         ...(option != "NetPay"
             ?[["P.A.Y.E:", `${formatCurrency(payeTax)}`]]
@@ -253,7 +249,7 @@ document.getElementById("payeForm").addEventListener("submit", function(event) {
             :[["PAY AFTER TAX:", `${formatCurrency(netAfter)}`]]),
         //["PAY AFTER TAX:", `${formatCurrency(payeAfter)}`],
         ...(nhifContribution != 0  
-            ?[["NHIF:", `- ${formatCurrency(nhifContribution)}`]]
+            ?[["SHIF:", `- ${formatCurrency(nhifContribution)}`]]
             :[]),
         //["Housing Levy:", `- ${formatCurrency(housing)}`],
         ...(option != "NetPay"
